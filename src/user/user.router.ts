@@ -6,7 +6,7 @@ export class UserRouter {
         this.configureRoutes();
     }
     private configureRoutes(): void {
-        this.router.get('/get-user/:id', (req, res, next) => {
+        this.router.get('/get-by-id/:id', (req, res, next) => {
             try {
                 const result = this.userController.getById(
                     parseInt(req.params.id),
@@ -16,18 +16,38 @@ export class UserRouter {
                 next(error);
             }
         });
+        this.router.get('/get-by-email/:email', (req, res, next) => {
+            try {
+                const result = this.userController.getByEmail(
+                    req.params.email,
+                );
+                res.status(200).json(result);
+            } catch (error: unknown) {
+                next(error);
+            }
+        });
         this.router.post('/add-user', (req, res, next) => {
             try {
-                const result = this.userController.add(req.body.username);
-                res.status(200).json(result);
+                const { username, email, password } = req.body;
+                const newUser = this.userController.add(username, email ,password);
+                res.status(200).json(newUser);
             } catch (error: unknown) {
                 next(error);
             }
         });
         this.router.put('/update-user', (req, res, next) => {
             try {
-                const { id, username } = req.body;
-                const updateName = this.userController.updateName(id,username)
+                const { id, username, email } = req.body;
+                const updateName = this.userController.updateUser(id,username,email)
+                res.status(200).json(updateName);
+            } catch (error: unknown) {
+                next(error);
+            }
+        });
+        this.router.put('/update-password', (req, res, next) => {
+            try {
+                const { id, password } = req.body;
+                const updateName = this.userController.updatePassword(id,password)
                 res.status(200).json(updateName);
             } catch (error: unknown) {
                 next(error);

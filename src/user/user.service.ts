@@ -1,8 +1,10 @@
 import { User } from './user';
 
 export interface UserService{
-    add(username: string): User;
+    add(username: string, email:string, password:string): User;
     getById(id: number): User | null;
-    delete(id: number): void;
-    updateName(id: number,name: string): void;
+    getByEmail(email: string): User | null;
+    delete(id: number): boolean;
+    updateUser(id: number,name: string,email: string): boolean;
+    updatePassword(id: number, password: string): boolean;
 }
