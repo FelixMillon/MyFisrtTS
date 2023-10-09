@@ -1,0 +1,48 @@
+import mysql from 'mysql';
+
+class MySQLConnection {
+    private static instance: MySQLConnection | null = null;
+    private connection: mysql.Connection;
+
+    private constructor() {
+        const host = process.env.MYSQL_HOST;
+        const user = process.env.MYSQL_USER;
+        const password = process.env.MYSQL_PASSWORD;
+        const database = process.env.MYSQL_DATABASE;
+
+        this.connection = mysql.createConnection({
+            host,
+            user,
+            password,
+            database,
+        });
+    }
+
+    static getInstance(): MySQLConnection {
+        if (!MySQLConnection.instance) {
+            MySQLConnection.instance = new MySQLConnection();
+        }
+        return MySQLConnection.instance;
+    }
+
+    connect(): void {
+        this.connection.connect((err) => {
+            if (err) {
+                console.error('Erreur de connexion MySQL :', err);
+            } else {
+                console.log('Connecté à MySQL');
+            }
+        });
+    }
+
+    query(sql: string, callback: (error: mysql.MysqlError | null, results: any) => void): void {
+        this.connection.query(sql, callback);
+    }
+
+    close(): void {
+        this.connection.end();
+        console.log('Déconnecté de MySQL');
+    }
+}
+
+export default MySQLConnection;

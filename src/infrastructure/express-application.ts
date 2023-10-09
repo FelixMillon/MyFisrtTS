@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 import { ExpressRouter } from './express-router';
 import { UserService } from '../user/user.service';
 import { UserJSONService } from '../user/user.json-service';
+import { UserMySQLService } from '../user/user.mysql-service';
 
 export class ExpressApplication {
     private expressRouter!: ExpressRouter;
@@ -38,6 +39,7 @@ export class ExpressApplication {
 
     private configureServices(){
         this.userService = new UserJSONService();
+        //this.userService = new UserMySQLService();
     }
 
     private configureExpressRouter(){

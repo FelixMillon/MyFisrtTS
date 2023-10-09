@@ -5,6 +5,7 @@ export class UserController {
     constructor(private userService: UserService) {}
     private users : User[] = []; 
     private filename : string = 'user.json';
+
     add(username: string,email: string, password: string): User {
         this.checkString(username, "username");
         this.checkString(email, "email");
