@@ -1,11 +1,16 @@
 import { User } from './user';
 import { UserService } from './user.service';
+import fs from 'fs';
 export class UserController {
     constructor(private userService: UserService) {}
+    private users : User[] = []; 
+    private filename : string = 'user.json';
     add(username: string,email: string, password: string): User {
         this.checkString(username, "username");
         this.checkString(email, "email");
         this.checkString(password, "password");
+        this.checkPassword(password);
+        this.checkEmailIsFree(email);
         return this.userService.add(username, email, password);
     }
 
@@ -18,6 +23,7 @@ export class UserController {
         this.checkID(id);
         this.checkString(username, "username");
         this.checkString(email, "email");
+        this.checkEmailIsFree(email);
         return this.userService.updateUser(id,username,email);
     }
     
@@ -71,6 +77,15 @@ export class UserController {
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;
         if(!regex.test(password)){
             throw new Error(`the password is not robust`);
+        }
+        // other checks
+    }
+
+    private checkEmailIsFree(email: string){
+        // is the email is free
+        this.users = JSON.parse(fs.readFileSync(this.filename, 'utf8'));
+        if(this.users.find((u : any) => u.email === email)){
+            throw new Error("This email is already used");
         }
         // other checks
     }
