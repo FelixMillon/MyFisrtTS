@@ -6,43 +6,42 @@ export class UserController {
     private users : User[] = []; 
     private filename : string = 'user.json';
 
-    add(username: string,email: string, password: string): User {
+    async add(username: string,email: string, password: string): Promise<User | null> {
         this.checkString(username, "username");
         this.checkString(email, "email");
         this.checkString(password, "password");
         this.checkPassword(password);
-        this.checkEmailIsFree(email);
         return this.userService.add(username, email, password);
     }
 
-    getById(id: number): User | null {
+    async getById(id: number): Promise<User | null> {
         this.checkID(id);
-        return this.userService.getById(id);
+        return await this.userService.getById(id);
     }
 
-    updateUser(id: number,username: string, email: string): boolean {
+    async updateUser(id: number,username: string, email: string): Promise<boolean> {
         this.checkID(id);
         this.checkString(username, "username");
         this.checkString(email, "email");
         this.checkEmailIsFree(email);
-        return this.userService.updateUser(id,username,email);
+        return await this.userService.updateUser(id,username,email);
     }
     
-    delete(id: number): boolean {
+    async delete(id: number): Promise<boolean> {
         this.checkID(id);
-        return this.userService.delete(id);
+        return await this.userService.delete(id);
     }
 
-    getByEmail(email: string): User | null {
+    async getByEmail(email: string): Promise<User | null> {
         this.checkString(email, "email");
-        return this.userService.getByEmail(email);
+        return await this.userService.getByEmail(email);
     }
 
-    updatePassword(id: number, password: string): boolean {
+    async updatePassword(id: number, password: string): Promise<boolean> {
         this.checkID(id);
         this.checkString(password, "password");
         this.checkPassword(password);
-        return this.userService.updatePassword(id, password);
+        return await this.userService.updatePassword(id, password);
     }
 
     private checkID(id: number) {
@@ -77,7 +76,7 @@ export class UserController {
         // is the password robust
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;
         if(!regex.test(password)){
-            throw new Error(`the password is not robust`);
+            throw new Error('the password is not robust');
         }
         // other checks
     }

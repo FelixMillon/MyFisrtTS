@@ -8,7 +8,8 @@ export class UserJSONService implements UserService {
     private filename : string = 'user.json';
 
 
-    add(username: string,email: string, password: string): User {
+    async add(username: string,email: string, password: string): Promise<User> {
+        this.checkEmailIsFree(email);
         this.users = JSON.parse(fs.readFileSync(this.filename, 'utf8'));
         let maxUserId = 0;
         for (const user of this.users) {
@@ -23,7 +24,7 @@ export class UserJSONService implements UserService {
         return newUser;
     }
 
-    getById(id: number): User | null {
+    async getById(id: number): Promise <User | null> {
         this.users = JSON.parse(fs.readFileSync(this.filename, 'utf8'));
         let selectedUser = this.users.find((user: User) => user.id === id);
         if (!selectedUser) {
@@ -32,7 +33,7 @@ export class UserJSONService implements UserService {
         return(selectedUser);
     }
 
-    updateUser(id: number, username: string, email: string): boolean {
+    async updateUser(id: number, username: string, email: string): Promise <boolean> {
 
         this.users = JSON.parse(fs.readFileSync(this.filename, 'utf8'));
         const userIndex = this.users.findIndex((user: User) => user.id === id);
@@ -50,7 +51,7 @@ export class UserJSONService implements UserService {
         return(true);
     }
 
-    delete(id: number): boolean {
+    async delete(id: number): Promise <boolean> {
         this.users = JSON.parse(fs.readFileSync(this.filename, 'utf8'));
         const userIndex = this.users.findIndex((user: User) => user.id === id);
         if (userIndex === -1) {
@@ -61,7 +62,7 @@ export class UserJSONService implements UserService {
         return(true);
     }
 
-    getByEmail(email: string): User | null {
+    async getByEmail(email: string): Promise <User | null> {
         this.users = JSON.parse(fs.readFileSync(this.filename, 'utf8'));
         let selectedUser = this.users.find((user: User) => user.email === email);
         if (!selectedUser) {
@@ -70,7 +71,7 @@ export class UserJSONService implements UserService {
         return(selectedUser);
     }
 
-    updatePassword(id: number, password: string): boolean {
+    async updatePassword(id: number, password: string): Promise <boolean> {
         this.users = JSON.parse(fs.readFileSync(this.filename, 'utf8'));
         const userIndex = this.users.findIndex((user: User) => user.id === id);
         if (userIndex === -1) {
@@ -84,5 +85,14 @@ export class UserJSONService implements UserService {
     private PublishUsers(Users : User[]){
         const usersJSON: string = JSON.stringify( Users, null, 2);
         fs.writeFileSync(this.filename, usersJSON);
+    }
+
+    private checkEmailIsFree(email: string){
+        // is the email is free
+        this.users = JSON.parse(fs.readFileSync(this.filename, 'utf8'));
+        if(this.users.find((u : any) => u.email === email)){
+            throw new Error("This email is already used");
+        }
+        // other checks
     }
 }

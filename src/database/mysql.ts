@@ -25,7 +25,7 @@ class MySQLConnection {
         return MySQLConnection.instance;
     }
 
-    connect(): void {
+    async connect(): Promise<void> {
         this.connection.connect((err) => {
             if (err) {
                 console.error('Erreur de connexion MySQL :', err);
@@ -35,11 +35,11 @@ class MySQLConnection {
         });
     }
 
-    query(sql: string, callback: (error: mysql.MysqlError | null, results: any) => void): void {
+    async query(sql: string, callback: (error: mysql.MysqlError | null, results: any) => void):  Promise<void> {
         this.connection.query(sql, callback);
     }
 
-    close(): void {
+    async close(): Promise<void> {
         this.connection.end();
         console.log('Déconnecté de MySQL');
     }

@@ -24,12 +24,6 @@
     "password": "jeanmdp"
   },
   {
-    "id": 5,
-    "username": "jeanjean",
-    "email": "jeanjean@bmcail.com",
-    "password": "jeanmdp"
-  },
-  {
     "id": 8,
     "username": "jeanjean",
     "email": "jeanjean@eedail.com",
@@ -67,8 +61,14 @@
   },
   {
     "id": 14,
-    "username": "toto",
-    "email": "tototest2@gmail.com",
-    "password": "MdpToto@124"
+    "username": "MrToto",
+    "email": "testest@gmail.com",
+    "password": "MdpToto@1234"
+  },
+  {
+    "id": 15,
+    "username": "jeanjean",
+    "email": "jeaazdadzaanjean@testmail.com",
+    "password": "jeanMdp@123"
   }
 ]
